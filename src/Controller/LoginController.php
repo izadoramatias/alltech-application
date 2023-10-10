@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class LoginController extends AbstractController
 {
-    #[Route('/login', methods: ['GET'])]
+    #[Route('/login', name: 'app_login', methods: ['GET'])]
     public function renderLoginPage(): Response
     {
         return $this->render('login.html.twig');
