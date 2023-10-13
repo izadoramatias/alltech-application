@@ -7,7 +7,7 @@
                 <div class="container-title container-md text-center">
                     <h4>Alltech Login</h4>
                 </div>
-                <form class="w-100 pe-3 ps-3 h-50 d-flex flex-column justify-content-between align-items-center gap-5" action="">
+                <form class="w-100 pe-3 ps-3 h-50 d-flex flex-column justify-content-between align-items-center gap-5" method="post" action="{{ path('app_login_request_process') }}">
                     <div class="w-100 form-fields-container">
                         <div class="input-group input-group mb-3">
                         <span class="input-group-text" id="basic-addon1">
@@ -23,7 +23,7 @@
                         </div>
                     </div>
                     <div class="d-flex align-items-center justify-content-center">
-                        <button type="button" class="btn btn-lg btn-danger px-5 text-center">Entrar</button>
+                        <button type="submit" class="btn btn-lg btn-danger px-5 text-center">Entrar</button>
                     </div>
                 </form>
             </div>
