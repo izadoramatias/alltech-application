@@ -4,7 +4,12 @@ controllers:
         namespace: App\Controller
     type: attribute
 
-login:
+app_login_render:
     path: /login
-    controller: App\Controller\LoginController::renderLoginPage
+    controller: App\Controller\LoginController::renderLoginForm
     methods: ['GET']
+
+app_login_request_process:
+    path: /login
+    controller: App\Controller\LoginController::processLoginRequest
+    methods: ['POST']
