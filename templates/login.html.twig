@@ -3,23 +3,25 @@
 {% block body %}
     <div class="h-100">
         <div class="bg-danger bg-gradient h-100 d-flex align-items-center justify-content-center position-relative">
-            <div class="w-50 h-50 bg-light rounded-4 gap-5 d-flex flex-column align-items-center justify-content-around">
+            <div class="w-50 min-vh-50 py-5 bg-light rounded-4 gap-5 d-flex flex-column align-items-center justify-content-around">
                 <div class="container-title container-md text-center">
                     <h4>Alltech Login</h4>
                 </div>
-                <form class="w-100 pe-3 ps-3 h-50 d-flex flex-column justify-content-between align-items-center gap-5" method="post" action="{{ path('app_login_request_process') }}">
+                <form class="w-100 pe-3 ps-3 h-50 d-flex flex-column justify-content-between align-items-center gap-5 needs-validation" method="post" action="{{ path('app_login_request_process') }}" novalidate>
                     <div class="w-100 form-fields-container">
-                        <div class="input-group input-group mb-3">
-                        <span class="input-group-text" id="basic-addon1">
-                           <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><style>svg{fill:#e4dede}</style><path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/></svg>
-                        </span>
-                            <input type="email" class="form-control" placeholder="Email" aria-label="email" name="email" aria-describedby="basic-addon1">
+                        <div class="input-group input-group mb-3 has-validation">
+                            <span class="input-group-text" id="basic-addon1">
+                               <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><style>svg{fill:#e4dede}</style><path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/></svg>
+                            </span>
+                            <input type="email" class="form-control" placeholder="Email" aria-label="email" name="email" aria-describedby="basic-addon1" required>
+                            <div class="invalid-feedback" >Invalid email</div>
                         </div>
                         <div class="input-group input-group mb-3">
-                        <span class="input-group-text" id="basic-addon1">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><style>svg{fill:#e4dede}</style><path d="M144 144v48H304V144c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z"/></svg>
-                        </span>
-                            <input type="password" class="form-control" placeholder="password" aria-label="password" name="password" aria-describedby="basic-addon1">
+                            <span class="input-group-text" id="basic-addon1">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><style>svg{fill:#e4dede}</style><path d="M144 144v48H304V144c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z"/></svg>
+                            </span>
+                            <input type="password" class="form-control" placeholder="password" aria-label="password" name="password" aria-describedby="basic-addon1" required>
+                            <div class="invalid-feedback" >Invalid password</div>
                         </div>
                     </div>
                     <div class="d-flex align-items-center justify-content-center">
@@ -33,6 +35,28 @@
             </div>
         </div>
     </div>
+    {% block javascripts %}
+        <script>
+            // Example starter JavaScript for disabling form submissions if there are invalid fields
+            (() => {
+                'use strict'
 
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                const forms = document.querySelectorAll('.needs-validation')
+
+                // Loop over them and prevent submission
+                Array.from(forms).forEach(form => {
+                    form.addEventListener('submit', event => {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+            })()
+        </script>
+    {% endblock %}
 {% endblock %}
 
