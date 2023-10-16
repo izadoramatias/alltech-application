@@ -17,7 +17,7 @@ class AuthService
         $login = $this->userRepository->findBy(['email' => $login->getEmail()]);
 
         if (empty($login)) {
-            throw new BadRequestException('Login informado não existe');
+            throw new BadRequestException;
         }
         return $login[0];
     }
