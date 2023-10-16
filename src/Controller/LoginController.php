@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\DTO\LoginDTO;
 use App\Entity\User;
 use App\Service\AuthService;
+use phpDocumentor\Reflection\Types\This;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,24 +23,33 @@ class LoginController extends AbstractController
     #[Route('/login', name: 'app_login_request_process')]
     public function processLoginRequest(
         Request $request,
-        AuthService $auth
-    )
+        AuthService $auth,
+    ): Response
     {
         $login = LoginDTO::fromRequest($request);
-        $loginData = $this->jsonSerialize($auth->login($login));
 
-        return $this->render('userOrderList.html.twig');
+        try {
+            $loginData = $auth->login($login);
+        } catch (BadRequestException $exception) {
+            toastr()
+                ->closeOnHover(true)
+                ->closeDuration(10)
+                ->addError('O email ou senha informados são inválidos!', 'Erro');
+            return $this->render(view: 'loginUnauthorized.html.twig', parameters: $this->loginData($login) , response: new Response(status: 401));
+        }
+
+        return $this->render(
+            view: 'userOrderList.html.twig',
+            response: new Response(status: 200));
     }
 
-
-    public function jsonSerialize(User $user)
+    public function loginData(LoginDTO $login): array
     {
-        $userArray = [
-            'name' => $user->getFullName(),
-            'email' => $user->getEmail(),
-            'permission' => $user->getPermission()
+        $loginData = [
+            'email' => $login->getEmail(),
+            'password' => $login->getPassword(),
         ];
 
-        return json_encode($userArray);
+        return $loginData;
     }
 }
