@@ -13,3 +13,13 @@ app_login_request_process:
     path: /login
     controller: App\Controller\LoginController::processLoginRequest
     methods: ['POST']
+
+app_userregister_render:
+    path: /register
+    controller: App\Controller\UserRegistrationController::renderUserRegistrationForm
+    methods: ['GET']
+
+app_register_request_process:
+    path: /register
+    controller: App\Controller\UserRegistrationController::processRegisterRequest
+    methods: ['POST']
