@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\DTO\LoginDTO;
 use App\Repository\UserRepository;
+use Respect\Validation\Validator as v;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -16,10 +17,16 @@ class AuthService
 
     public function login(LoginDTO $loginRequest)
     {
-        $loginRepository = $this->userRepository->findBy(['email' => $loginRequest->getEmail()]);
-        $isLoginEmpty = empty($loginRepository);
+        $isLoginRequestEmpty = !(v::stringType()->notEmpty()->validate($loginRequest->getEmail()));
 
-        if ( $isLoginEmpty ) {
+        if ( $isLoginRequestEmpty ) {
+            throw new BadRequestException;
+        }
+
+        $loginRepository = $this->userRepository->findBy(['email' => $loginRequest->getEmail()]);
+        $loginNotExists = !(v::arrayType()->notEmpty()->validate($loginRepository));
+
+        if ( $loginNotExists ) {
             throw new BadRequestException;
         }
 
