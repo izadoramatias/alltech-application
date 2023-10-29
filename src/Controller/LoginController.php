@@ -3,9 +3,7 @@
 namespace App\Controller;
 
 use App\DTO\LoginDTO;
-use App\Entity\User;
 use App\Service\AuthService;
-use phpDocumentor\Reflection\Types\This;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
