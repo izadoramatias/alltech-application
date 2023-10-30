@@ -11,7 +11,6 @@ class UserRegisterDTO
         private ?string $email = null,
         private ?string $phone = null,
         private ?string $password = null,
-        private ?string $passwordConfirmation = null,
     ){}
 
     public static function fromRequest(Request $request): self
@@ -23,7 +22,6 @@ class UserRegisterDTO
         $dto->email = $request->get('email');
         $dto->phone = $request->get('phone');
         $dto->password = $request->get('password');
-        $dto->passwordConfirmation = $request->get('passwordConfirmation');
 
         return $dto;
     }
@@ -58,13 +56,5 @@ class UserRegisterDTO
     public function getPassword(): ?string
     {
         return $this->password;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getPasswordConfirmation(): ?string
-    {
-        return $this->passwordConfirmation;
     }
 }
