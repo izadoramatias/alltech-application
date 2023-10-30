@@ -27,7 +27,7 @@ class LoginController extends AbstractController
         $login = LoginDTO::fromRequest($request);
 
         try {
-            $loginData = $auth->login($login);
+            $loginAuth = $auth->login($login);
         } catch (BadRequestException $exception) {
             toastr()
                 ->closeOnHover(true)
@@ -41,7 +41,7 @@ class LoginController extends AbstractController
             response: new Response(status: 200));
     }
 
-    public function loginData(LoginDTO $login): array
+    private function loginData(LoginDTO $login): array
     {
         $loginData = [
             'email' => $login->getEmail(),
