@@ -47,9 +47,8 @@ class AuthService
         $isEmailEmpty                = !v::stringType()->notEmpty()->validate($userRegisterRequest->getEmail());
         $isPhoneEmpty                = !v::stringType()->notEmpty()->validate($userRegisterRequest->getPhone());
         $isPasswordEmpty             = !v::stringType()->notEmpty()->validate($userRegisterRequest->getPassword());
-        $isPasswordConfirmationEmpty = !v::stringType()->notEmpty()->validate($userRegisterRequest->getPasswordConfirmation());
 
-        if ( $isNameEmpty or $isEmailEmpty or $isPhoneEmpty or $isPasswordEmpty or $isPasswordConfirmationEmpty) {
+        if ( $isNameEmpty or $isEmailEmpty or $isPhoneEmpty or $isPasswordEmpty) {
             throw new BadRequestException();
         }
 
