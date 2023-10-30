@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\DTO\LoginDTO;
+use App\DTO\UserRegisterDTO;
 use App\Repository\UserRepository;
 use Respect\Validation\Validator as v;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -38,5 +39,19 @@ class AuthService
         }
 
         return $user;
+    }
+
+    public function register(UserRegisterDTO $userRegisterRequest)
+    {
+        $isNameEmpty                 = !v::stringType()->notEmpty()->validate($userRegisterRequest->getFullName());
+        $isEmailEmpty                = !v::stringType()->notEmpty()->validate($userRegisterRequest->getEmail());
+        $isPhoneEmpty                = !v::stringType()->notEmpty()->validate($userRegisterRequest->getPhone());
+        $isPasswordEmpty             = !v::stringType()->notEmpty()->validate($userRegisterRequest->getPassword());
+        $isPasswordConfirmationEmpty = !v::stringType()->notEmpty()->validate($userRegisterRequest->getPasswordConfirmation());
+
+        if ( $isNameEmpty or $isEmailEmpty or $isPhoneEmpty or $isPasswordEmpty or $isPasswordConfirmationEmpty) {
+            throw new BadRequestException();
+        }
+
     }
 }
