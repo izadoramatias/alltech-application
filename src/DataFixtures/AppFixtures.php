@@ -39,7 +39,7 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies()
     {
         return [
-            AdmFixtures::class
+            AdmPermissionFixture::class
         ];
     }
 }

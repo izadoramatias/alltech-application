@@ -6,7 +6,7 @@ use App\Entity\Permission;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-class AdmFixtures extends Fixture
+class AdmPermissionFixture extends Fixture
 {
     public function load(ObjectManager $manager)
     {
