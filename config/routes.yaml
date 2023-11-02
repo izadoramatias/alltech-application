@@ -23,3 +23,48 @@ app_register_request_process:
     path: /register
     controller: App\Controller\UserRegistrationController::processRegisterRequest
     methods: ['POST']
+
+app_user_order_listing_render:
+  path: /home
+  controller: App\Controller\UserOrdersController::renderHome
+  methods: ['GET']
+
+app_user_logout:
+    path: /logout
+    controller: App\Controller\LoginController::processLogoutRequest
+    methods: ['GET']
+
+app_adm_dashboard_render:
+  path: /dashboard
+  controller: App\Controller\AdmDonationsDashboardController::renderDashboard
+  methods: ['GET']
+
+app_home_orders_rendering:
+  path: /orders
+  controller: App\Controller\UserOrdersController::renderOrders
+  methods: ['GET']
+
+app_user_order_edit:
+  path: /order/edit/{id}
+  controller: App\Controller\UserOrdersController::processFormEditOrderRequest
+  methods: ['GET']
+
+app_user_order_edit_save:
+  path: /order/edit/{id}/save
+  controller: App\Controller\UserOrdersController::processSaveEditedOrderRequest
+
+app_order_register_render:
+  path: /order
+  controller: App\Controller\UserOrdersController::registerOrderRender
+  methods: ['GET']
+
+app_request_delete_order:
+  path: /order/delete/{id}
+  controller: App\Controller\UserOrdersController::processDeleteOrderRequest
+
+app_process_order_register_request:
+  path: /order
+  controller: App\Controller\UserOrdersController::processRegisterOrderRequest
+  methods: ['POST']
+
+

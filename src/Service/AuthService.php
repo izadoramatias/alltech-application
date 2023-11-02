@@ -22,10 +22,10 @@ class AuthService
     public function __construct(
         private UserRepository $userRepository,
         private UserPasswordHasherInterface $hasher,
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
     ){}
 
-    public function login(LoginDTO $loginRequest)
+    public function login(LoginDTO $loginRequest): User
     {
         $isLoginRequestEmpty = !(v::stringType()->notEmpty()->validate($loginRequest->getEmail()));
 
@@ -33,14 +33,14 @@ class AuthService
             throw new BadRequestException;
         }
 
-        $loginRepository = $this->userRepository->findBy(['email' => $loginRequest->getEmail()]);
-        $loginNotExists = !(v::arrayType()->notEmpty()->validate($loginRepository));
+        $userRepository = $this->userRepository->findBy(['email' => $loginRequest->getEmail()]);
+        $loginNotExists = !(v::arrayType()->notEmpty()->validate($userRepository));
 
         if ( $loginNotExists ) {
             throw new BadRequestException;
         }
 
-        $user = $loginRepository[0];
+        $user = $userRepository[0];
         $isPasswordValid = $this->hasher->isPasswordValid($user, $loginRequest->getPassword());
 
         if ( !$isPasswordValid ) {
@@ -50,28 +50,30 @@ class AuthService
         return $user;
     }
 
-    public function register(UserRegisterDTO $userRegisterRequest)
+    public function register(UserRegisterDTO $userRegisterRequest): Response
     {
-        $isNameEmpty                 = !v::stringType()->notEmpty()->validate($userRegisterRequest->getFullName());
-        $isEmailEmpty                = !v::stringType()->notEmpty()->validate($userRegisterRequest->getEmail());
         $isPhoneEmpty                = !v::stringType()->notEmpty()->validate($userRegisterRequest->getPhone());
-        $isPasswordEmpty             = !v::stringType()->notEmpty()->validate($userRegisterRequest->getPassword());
-        $commomPermission = $this->entityManager->getRepository(Permission::class)->findOneBy(['name' => self::COMMOM_PERMISSION]);
         $emailAlreadyExists = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $userRegisterRequest->getEmail()]) ;
 
         if ( $emailAlreadyExists ) {
             throw new ConflictHttpException();
         }
 
+        $isNameEmpty                 = !v::stringType()->notEmpty()->validate($userRegisterRequest->getFullName());
+        $isEmailEmpty                = !v::stringType()->notEmpty()->validate($userRegisterRequest->getEmail());
+        $isPasswordEmpty             = !v::stringType()->notEmpty()->validate($userRegisterRequest->getPassword());
+        $commomPermission = $this->entityManager->getRepository(Permission::class)->findOneBy(['name' => self::COMMOM_PERMISSION]);
+
         if ( $isNameEmpty or $isEmailEmpty or $isPhoneEmpty or $isPasswordEmpty) {
             throw new BadRequestException();
         }
 
         $user = new User();
+        $hashPassword = $this->hasher->hashPassword($user, $userRegisterRequest->getPassword());
         $user
             ->setFullName($userRegisterRequest->getFullName())
             ->setEmail($userRegisterRequest->getEmail())
-            ->setPassword($userRegisterRequest->getPassword())
+            ->setPassword($hashPassword)
             ->setPhone($userRegisterRequest->getPhone())
             ->setPermission($commomPermission);
 

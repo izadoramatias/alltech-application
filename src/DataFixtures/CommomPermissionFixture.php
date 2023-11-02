@@ -12,6 +12,7 @@ class CommomPermissionFixture extends Fixture
     {
         $admPermission = new Permission();
         $admPermission->setName('COMMOM');
+        $admPermission->setId(4);
 
         $manager->persist($admPermission);
         $manager->flush();

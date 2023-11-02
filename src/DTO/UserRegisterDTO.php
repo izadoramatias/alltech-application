@@ -17,7 +17,6 @@ class UserRegisterDTO
     {
         $dto = new self();
 
-
         $dto->fullName = $request->get('name');
         $dto->email = $request->get('email');
         $dto->phone = $request->get('phone');

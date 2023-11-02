@@ -11,12 +11,22 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: 'users')]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+
+    /**
+     * @param int|null $id
+     * @return User
+     */
+    public function setId(?int $id): User
+    {
+        $this->id = $id;
+        return $this;
+    }
 
     /**
      * @var string The hashed password
@@ -37,8 +47,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(nullable: false)]
     private ?Permission $Permission = null;
 
-    #[ORM\OneToMany(mappedBy: 'User_id', targetEntity: Order::class)]
+    #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Order::class)]
     private Collection $orders;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $auth_token = null;
 
     public function __construct()
     {
@@ -58,25 +71,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return (string) $this->id;
-    }
-
-    /**
-     * @see UserInterface
-     */
-    public function getRoles(): array
-    {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
-    }
-
-    public function setRoles(array $roles): static
-    {
-        $this->roles = $roles;
-
-        return $this;
     }
 
     /**
@@ -177,6 +171,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $order->setUserId(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAuthToken(): ?string
+    {
+        return $this->auth_token;
+    }
+
+    public function setAuthToken(?string $auth_token): static
+    {
+        $this->auth_token = $auth_token;
 
         return $this;
     }

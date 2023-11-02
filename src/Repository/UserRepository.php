@@ -39,6 +39,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
+    public function findUserIdByEmail(string $email)
+    {
+        $userRepo = $this->getEntityManager()->createQuery("
+        SELECT u.id, u.full_name, u.email, u.phone, u.password, p
+        FROM App\Entity\User u
+        INNER JOIN App\Entity\Permission p
+        WHERE u.email = '$email' and u.Permission = p")->getResult();
+
+        return $userRepo;
+    }
+
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */
