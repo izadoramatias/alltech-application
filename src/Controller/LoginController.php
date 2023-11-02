@@ -21,7 +21,7 @@ class LoginController extends AbstractController
     #[Route('/login', name: 'app_login_request_process')]
     public function processLoginRequest(
         Request $request,
-        AuthService $auth,
+        AuthService $auth
     ): Response
     {
         $login = LoginDTO::fromRequest($request);
@@ -36,9 +36,7 @@ class LoginController extends AbstractController
             return $this->render(view: 'loginUnauthorized.html.twig', parameters: $this->loginData($login) , response: new Response(status: 401));
         }
 
-        return $this->render(
-            view: 'userOrderList.html.twig',
-            response: new Response(status: 200));
+        return $this->redirectToRoute('app_user_order_listing_render');
     }
 
     private function loginData(LoginDTO $login): array
