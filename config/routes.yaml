@@ -23,3 +23,8 @@ app_register_request_process:
     path: /register
     controller: App\Controller\UserRegistrationController::processRegisterRequest
     methods: ['POST']
+
+app_user_order_listing_render:
+  path: /home
+  controller: App\Controller\ListingUserOrdersController::renderListing
+  methods: ['GET']
