@@ -36,7 +36,7 @@ class UserRegistrationController extends AbstractController
             return $this->render(view: 'userRegisterFailed.html.twig', parameters: $this->registerData($register) , response: new Response(status: 409));
         }
 
-        return $this->render(view: 'userOrderList.html.twig', response: new Response(200));
+        return $this->redirectToRoute('app_user_order_listing_render');
     }
 
     private function registerData(UserRegisterDTO $userRegisterDTO): array
