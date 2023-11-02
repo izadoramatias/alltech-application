@@ -52,26 +52,28 @@ class AuthService
 
     public function register(UserRegisterDTO $userRegisterRequest)
     {
-        $isNameEmpty                 = !v::stringType()->notEmpty()->validate($userRegisterRequest->getFullName());
-        $isEmailEmpty                = !v::stringType()->notEmpty()->validate($userRegisterRequest->getEmail());
         $isPhoneEmpty                = !v::stringType()->notEmpty()->validate($userRegisterRequest->getPhone());
-        $isPasswordEmpty             = !v::stringType()->notEmpty()->validate($userRegisterRequest->getPassword());
-        $commomPermission = $this->entityManager->getRepository(Permission::class)->findOneBy(['name' => self::COMMOM_PERMISSION]);
         $emailAlreadyExists = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $userRegisterRequest->getEmail()]) ;
 
         if ( $emailAlreadyExists ) {
             throw new ConflictHttpException();
         }
 
+        $isNameEmpty                 = !v::stringType()->notEmpty()->validate($userRegisterRequest->getFullName());
+        $isEmailEmpty                = !v::stringType()->notEmpty()->validate($userRegisterRequest->getEmail());
+        $isPasswordEmpty             = !v::stringType()->notEmpty()->validate($userRegisterRequest->getPassword());
+        $commomPermission = $this->entityManager->getRepository(Permission::class)->findOneBy(['name' => self::COMMOM_PERMISSION]);
+
         if ( $isNameEmpty or $isEmailEmpty or $isPhoneEmpty or $isPasswordEmpty) {
             throw new BadRequestException();
         }
 
         $user = new User();
+        $hashPassword = $this->hasher->hashPassword($user, $userRegisterRequest->getPassword());
         $user
             ->setFullName($userRegisterRequest->getFullName())
             ->setEmail($userRegisterRequest->getEmail())
-            ->setPassword($userRegisterRequest->getPassword())
+            ->setPassword($hashPassword)
             ->setPhone($userRegisterRequest->getPhone())
             ->setPermission($commomPermission);
 
