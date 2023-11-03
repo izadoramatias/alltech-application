@@ -28,3 +28,8 @@ app_user_order_listing_render:
   path: /home
   controller: App\Controller\ListingUserOrdersController::renderListing
   methods: ['GET']
+
+app_user_logout:
+    path: /logout
+    controller: App\Controller\ListingUserOrdersController::processLogoutRequest
+    methods: ['POST']
