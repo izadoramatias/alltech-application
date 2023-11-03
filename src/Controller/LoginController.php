@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 
 class LoginController extends AbstractController
@@ -18,10 +19,11 @@ class LoginController extends AbstractController
         return $this->render('login.html.twig');
     }
 
-    #[Route('/login', name: 'app_login_request_process')]
+    #[Route('/login', name: 'app_login_request_process', methods: ['POST'])]
     public function processLoginRequest(
         Request $request,
-        AuthService $auth
+        AuthService $auth,
+        Session $session
     ): Response
     {
         $login = LoginDTO::fromRequest($request);
@@ -36,6 +38,8 @@ class LoginController extends AbstractController
             return $this->render(view: 'loginUnauthorized.html.twig', parameters: $this->loginData($login) , response: new Response(status: 401));
         }
 
+        $session->start();
+        $session->set('isUserLogged', true);
         return $this->redirectToRoute('app_user_order_listing_render');
     }
 
@@ -47,5 +51,12 @@ class LoginController extends AbstractController
         ];
 
         return $loginData;
+    }
+
+    #[Route('/logout', name: 'app_user_logout', methods: ['POST'])]
+    public function processLogoutRequest(Session $session): Response
+    {
+        $session->invalidate();
+        return $this->redirectToRoute('app_login_render');
     }
 }
