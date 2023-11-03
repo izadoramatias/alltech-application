@@ -7,12 +7,14 @@ use App\DTO\UserRegisterDTO;
 use App\Entity\Permission;
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Security\AuthenticationToken;
 use Doctrine\ORM\EntityManagerInterface;
 use Respect\Validation\Validator as v;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class AuthService
 {
@@ -22,7 +24,7 @@ class AuthService
     public function __construct(
         private UserRepository $userRepository,
         private UserPasswordHasherInterface $hasher,
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
     ){}
 
     public function login(LoginDTO $loginRequest)
@@ -33,14 +35,14 @@ class AuthService
             throw new BadRequestException;
         }
 
-        $loginRepository = $this->userRepository->findBy(['email' => $loginRequest->getEmail()]);
-        $loginNotExists = !(v::arrayType()->notEmpty()->validate($loginRepository));
+        $userRepository = $this->userRepository->findBy(['email' => $loginRequest->getEmail()]);
+        $loginNotExists = !(v::arrayType()->notEmpty()->validate($userRepository));
 
         if ( $loginNotExists ) {
             throw new BadRequestException;
         }
 
-        $user = $loginRepository[0];
+        $user = $userRepository[0];
         $isPasswordValid = $this->hasher->isPasswordValid($user, $loginRequest->getPassword());
 
         if ( !$isPasswordValid ) {
