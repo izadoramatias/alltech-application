@@ -31,5 +31,10 @@ app_user_order_listing_render:
 
 app_user_logout:
     path: /logout
-    controller: App\Controller\ListingUserOrdersController::processLogoutRequest
-    methods: ['POST']
+    controller: App\Controller\LoginController::processLogoutRequest
+    methods: ['GET']
+
+app_adm_dashboard_render:
+  path: /dashboard
+  controller: App\Controller\AdmDonationsDashboardController::renderDashboard
+  methods: ['GET']
