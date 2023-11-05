@@ -7,14 +7,12 @@ use App\DTO\UserRegisterDTO;
 use App\Entity\Permission;
 use App\Entity\User;
 use App\Repository\UserRepository;
-use App\Security\AuthenticationToken;
 use Doctrine\ORM\EntityManagerInterface;
 use Respect\Validation\Validator as v;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class AuthService
 {
@@ -27,7 +25,7 @@ class AuthService
         private EntityManagerInterface $entityManager,
     ){}
 
-    public function login(LoginDTO $loginRequest)
+    public function login(LoginDTO $loginRequest): User
     {
         $isLoginRequestEmpty = !(v::stringType()->notEmpty()->validate($loginRequest->getEmail()));
 
