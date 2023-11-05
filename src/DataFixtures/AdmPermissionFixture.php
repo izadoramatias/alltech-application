@@ -12,6 +12,7 @@ class AdmPermissionFixture extends Fixture
     {
         $admPermission = new Permission();
         $admPermission->setName('ADM');
+        $admPermission->setId(3);
 
         $manager->persist($admPermission);
         $manager->flush();
