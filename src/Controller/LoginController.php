@@ -13,6 +13,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class LoginController extends AbstractController
 {
+    const ADM_PERMISSION = 3;
+    const COMMOM_PERMISSION = 4;
+
     #[Route('/login', name: 'app_login_render', methods: ['GET'])]
     public function renderLoginForm(): Response
     {
@@ -38,8 +41,15 @@ class LoginController extends AbstractController
             return $this->render(view: 'loginUnauthorized.html.twig', parameters: $this->loginData($login) , response: new Response(status: 401));
         }
 
+        $userPermission = $loginAuth->getPermission()->getId();
+
         $session->start();
         $session->set('isUserLogged', true);
+        $session->set('userPermission', $userPermission);
+
+        if ( $userPermission === self::ADM_PERMISSION ) {
+            return $this->redirectToRoute('app_adm_dashboard_render');
+        }
         return $this->redirectToRoute('app_user_order_listing_render');
     }
 
@@ -53,7 +63,7 @@ class LoginController extends AbstractController
         return $loginData;
     }
 
-    #[Route('/logout', name: 'app_user_logout', methods: ['POST'])]
+    #[Route('/logout', name: 'app_user_logout', methods: ['GET'])]
     public function processLogoutRequest(Session $session): Response
     {
         $session->invalidate();
