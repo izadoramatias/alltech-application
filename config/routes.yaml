@@ -26,7 +26,7 @@ app_register_request_process:
 
 app_user_order_listing_render:
   path: /home
-  controller: App\Controller\ListingUserOrdersController::renderListing
+  controller: App\Controller\UserOrdersController::renderListing
   methods: ['GET']
 
 app_user_logout:
