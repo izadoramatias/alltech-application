@@ -5,10 +5,11 @@ namespace App\Entity;
 use App\Repository\OrderRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Internal\TentativeType;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: 'Orders')]
-class Order
+class Order implements \JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -24,6 +25,10 @@ class Order
     #[ORM\ManyToOne(inversedBy: 'orders')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $User_id = null;
+
+    #[ORM\OneToOne(inversedBy: 'user_order', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Address $address_id = null;
 
     public function getId(): ?int
     {
@@ -64,5 +69,27 @@ class Order
         $this->User_id = $User_id;
 
         return $this;
+    }
+
+    public function getAddressId(): ?Address
+    {
+        return $this->address_id;
+    }
+
+    public function setAddressId(Address $address_id): static
+    {
+        $this->address_id = $address_id;
+
+        return $this;
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return [
+            'id' => $this->id,
+            'descricao' => $this->description,
+            'endereco' => $this->address_id->getStreet(),
+            'status' => $this->status
+        ];
     }
 }
