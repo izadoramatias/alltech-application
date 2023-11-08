@@ -42,9 +42,11 @@ class LoginController extends AbstractController
         }
 
         $userPermission = $loginAuth->getPermission()->getId();
+        $userEmail = $loginAuth->getEmail();
 
         $session->start();
         $session->set('isUserLogged', true);
+        $session->set('userEmail', $userEmail);
         $session->set('userPermission', $userPermission);
 
         if ( $userPermission === self::ADM_PERMISSION ) {
