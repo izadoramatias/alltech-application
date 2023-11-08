@@ -67,12 +67,57 @@
             </div>
             <div style="height: 90%;" class="body-body pt-5">
                 <div style="box-shadow: 0 2px 4px 1px rgba(0,0,0,0.24);" class="h-100 container-fluid rounded border-top border-3 border-danger">
+                    <div class="h-100 p-2">
+                        <table id="orders-table">
+                            <thead>
+                                <tr>
+                                    <th>Descrição</th>
+                                    <th>Endereço</th>
+                                    <th>Status do pedido</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     {% block javascripts %}
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
+        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
+
+        <script>
+            (function ($) {
+                $(document).ready(function() {
+                    let dataTable = $('#orders-table').DataTable({
+                        "ajax": {
+                            "url": "/home",
+                        },
+                        iDisplayLength: 25,
+                        "columns": [
+                            { "data": "Descrição" },
+                            { "data": "Endereço" },
+                            { "data": "Status do pedido"},
+                            { "data": "Ações" }
+                        ],
+                        'language': {
+                            url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json',
+                        },
+                        searching: false,
+                        responsive: true,
+                        ordering: false,
+                        serverSide: true,
+                        lengthChange: false,
+                        paging: false
+                    });
+
+                    dataTable.draw();
+                });
+            })(jQuery);
+        </script>
     {% endblock %}
 {% endblock %}
