@@ -8,6 +8,7 @@ use App\Repository\OrderRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -22,7 +23,7 @@ class UserOrdersController extends AbstractController
     ){}
 
     #[Route('/home', name: 'app_user_order_listing_render', methods: ['GET'])]
-    public function renderListing(Session $session, Request $request): Response
+    public function renderHome(Session $session): Response
     {
         if ( !$session->has('isUserLogged') ){
             $response = $this->redirectToRoute('app_login_render');
@@ -31,23 +32,17 @@ class UserOrdersController extends AbstractController
             return $response;
         }
 
-        if ( $request->query->get('draw') ) {
-            return $this->render(
-                'userOrderList.html.twig',
-                DataTablesJsonFormatter::format
-                (
-                    AddressFormatter::format($this->getAllUserOrders($session)),
-                    $request->query->get('draw')
-                )
-            );
-        }
-        return $this->render(
-            'userOrderList.html.twig',
-            DataTablesJsonFormatter::format
-            (
-                AddressFormatter::format($this->getAllUserOrders($session))
-            )
-        );
+        return $this->render('userOrderList.html.twig');
+    }
+
+    #[Route('/orders', name: 'app_home_orders_rendering', methods: ['GET'])]
+    public function renderOrders(Session $session, Request $request): Response
+    {
+        return new JsonResponse(DataTablesJsonFormatter::format
+        (
+            AddressFormatter::format($this->getAllUserOrders($session)),
+            $request->query->get('draw')
+        ));
     }
 
     private function getAllUserOrders(Session $session): array

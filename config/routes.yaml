@@ -26,7 +26,7 @@ app_register_request_process:
 
 app_user_order_listing_render:
   path: /home
-  controller: App\Controller\UserOrdersController::renderListing
+  controller: App\Controller\UserOrdersController::renderHome
   methods: ['GET']
 
 app_user_logout:
@@ -37,4 +37,9 @@ app_user_logout:
 app_adm_dashboard_render:
   path: /dashboard
   controller: App\Controller\AdmDonationsDashboardController::renderDashboard
+  methods: ['GET']
+
+app_home_orders_rendering:
+  path: /orders
+  controller: App\Controller\UserOrdersController::renderOrders
   methods: ['GET']
