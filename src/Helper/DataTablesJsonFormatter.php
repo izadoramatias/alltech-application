@@ -4,7 +4,7 @@ namespace App\Helper;
 
 class DataTablesJsonFormatter
 {
-    public static function format(array $items, ?int $draw = 0): array
+    public static function format(array $items, int $draw): array
     {
         $json = [
             'draw' => $draw,

@@ -68,7 +68,7 @@
             <div style="height: 90%;" class="body-body pt-5">
                 <div style="box-shadow: 0 2px 4px 1px rgba(0,0,0,0.24);" class="h-100 container-fluid rounded border-top border-3 border-danger">
                     <div class="h-100 p-2">
-                        <table id="orders-table">
+                        <table id="orders-table" class="w-100 row-border">
                             <thead>
                                 <tr>
                                     <th>Descrição</th>
@@ -96,13 +96,16 @@
                     let dataTable = $('#orders-table').DataTable({
                         "ajax": {
                             "url": "/orders",
+                            'dataSrc': function(data) {
+                                return JSON.parse(data.data);
+                            }
                         },
                         iDisplayLength: 25,
                         "columns": [
-                            { "data": "Descrição" },
-                            { "data": "Endereço" },
-                            { "data": "Status do pedido"},
-                            { "data": "Ações" }
+                            { "data": "description" },
+                            { "data": "address" },
+                            { "data": "status"},
+                            { "data": null},
                         ],
                         'language': {
                             url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json',
@@ -112,9 +115,19 @@
                         ordering: false,
                         serverSide: true,
                         lengthChange: false,
-                        paging: false
-                    });
+                        paging: false,
+                        autoWidth: true,
+                        processing: true,
+                        createdRow: function (row, data, dataIndex) {
+                            console.log(data)
+                            let id = data.id;
+                            let actionsHtml = '<button class="btn btn-success" type="submit" data-id="' + id + '" class="btn-edit">Editar</button>';
+                            let columnActions = $(row).find('td:eq(3)');
 
+                            columnActions.html(actionsHtml);
+
+                        }
+                    });
                     dataTable.draw();
                 });
             })(jQuery);

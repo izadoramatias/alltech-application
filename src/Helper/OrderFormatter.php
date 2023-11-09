@@ -2,7 +2,7 @@
 
 namespace App\Helper;
 
-class AddressFormatter
+class OrderFormatter
 {
     private static array $formatedOrders = [];
 
@@ -17,7 +17,8 @@ class AddressFormatter
             self::$formatedOrders[] = [
                 'description' => $order['description'],
                 'address' => "$zip_code, $city, $district, $street, $number",
-                'status' => $order['status'],
+                'status' => $order['status'] === 1 ? 'Em Andamento' : 'Concluído',
+                'id' => $order['id']
             ];
         }
 

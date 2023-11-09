@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Helper\AddressFormatter;
 use App\Helper\DataTablesJsonFormatter;
+use App\Helper\OrderFormatter;
 use App\Repository\OrderRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -36,19 +36,17 @@ class UserOrdersController extends AbstractController
     }
 
     #[Route('/orders', name: 'app_home_orders_rendering', methods: ['GET'])]
-    public function renderOrders(Session $session, Request $request): Response
+    public function renderOrders(Request $request): Response
     {
         return new JsonResponse(DataTablesJsonFormatter::format
         (
-            AddressFormatter::format($this->getAllUserOrders($session)),
+            OrderFormatter::format($this->getAllUserOrders()),
             $request->query->get('draw')
         ));
     }
 
-    private function getAllUserOrders(Session $session): array
+    private function getAllUserOrders(): array
     {
-        $userEmail = $session->get('userEmail');
-        $user = $this->userRepository->findOneBy(['email' => $userEmail]);
         $orders = $this->entityManager->createQuery(
             'SELECT o.id, o.description, o.status, a.street, a.zip_code, a.city, a.district, a.number
             FROM App\Entity\Order o
