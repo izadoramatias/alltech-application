@@ -15,10 +15,9 @@ class AddressFormatter
             $street = $order['street'];
             $number = $order['number'];
             self::$formatedOrders[] = [
-                'id' => $order['id'],
                 'description' => $order['description'],
+                'address' => "$zip_code, $city, $district, $street, $number",
                 'status' => $order['status'],
-                'address' => "$zip_code, $city, $district, $street, $number"
             ];
         }
 
