@@ -47,12 +47,7 @@ class UserOrdersController extends AbstractController
 
     private function getAllUserOrders(): array
     {
-        $orders = $this->entityManager->createQuery(
-            'SELECT o.id, o.description, o.status, a.street, a.zip_code, a.city, a.district, a.number
-            FROM App\Entity\Order o
-            JOIN App\Entity\Address a WITH o.address_id = a.id'
-        );
-
+        $orders = $this->orderRepository->findAllOrders();
         return $orders->getResult();
     }
 

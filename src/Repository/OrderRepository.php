@@ -2,8 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\Address;
 use App\Entity\Order;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,6 +21,15 @@ class OrderRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Order::class);
+    }
+
+    public function findAllOrders()
+    {
+        $orders = $this->getEntityManager()->createQuery('SELECT o.id, o.description, o.status, a.street, a.zip_code, a.city, a.district, a.number
+            FROM App\Entity\Order o
+            JOIN App\Entity\Address a WITH o.address_id = a.id');
+
+        return $orders;
     }
 
 //    /**
