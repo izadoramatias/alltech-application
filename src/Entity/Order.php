@@ -22,9 +22,9 @@ class Order implements \JsonSerializable
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $status = null;
 
-    #[ORM\ManyToOne(inversedBy: 'orders')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $User_id = null;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'orders')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
+    private ?User $user_id = null;
 
     #[ORM\OneToOne(inversedBy: 'user_order', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
@@ -61,12 +61,12 @@ class Order implements \JsonSerializable
 
     public function getUserId(): ?User
     {
-        return $this->User_id;
+        return $this->user_id;
     }
 
-    public function setUserId(?User $User_id): static
+    public function setUserId(?User $user_id): static
     {
-        $this->User_id = $User_id;
+        $this->user_id = $user_id;
 
         return $this;
     }

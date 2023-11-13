@@ -13,6 +13,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UserRegistrationController extends AbstractController
 {
+    private bool $isEmailAlreadyRegistered = false;
+
     #[Route('/register', name: 'app_userregister_render', methods: ['GET'])]
     public function renderUserRegistrationForm(): Response
     {
@@ -33,15 +35,22 @@ class UserRegistrationController extends AbstractController
                 ->closeOnHover(true)
                 ->closeDuration(10)
                 ->addError('O email informado já está cadastrado', 'Erro');
+
+            $this->setUserToAlreadyRegistered();
             return $this->render(view: 'userRegisterFailed.html.twig', parameters: $this->registerData($register) , response: new Response(status: 409));
         }
 
         return $this->redirectToRoute('app_user_order_listing_render');
     }
 
+    private function setUserToAlreadyRegistered() {
+        $this->isEmailAlreadyRegistered = true;
+    }
+
     private function registerData(UserRegisterDTO $userRegisterDTO): array
     {
         return [
+            'isEmailAlreadyRegistered' => $this->isEmailAlreadyRegistered,
             'name' => $userRegisterDTO->getFullName(),
             'email' => $userRegisterDTO->getEmail(),
             'phone' => $userRegisterDTO->getPhone(),

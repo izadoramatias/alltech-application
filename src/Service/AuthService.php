@@ -50,7 +50,7 @@ class AuthService
         return $user;
     }
 
-    public function register(UserRegisterDTO $userRegisterRequest)
+    public function register(UserRegisterDTO $userRegisterRequest): Response
     {
         $isPhoneEmpty                = !v::stringType()->notEmpty()->validate($userRegisterRequest->getPhone());
         $emailAlreadyExists = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $userRegisterRequest->getEmail()]) ;

@@ -43,3 +43,19 @@ app_home_orders_rendering:
   path: /orders
   controller: App\Controller\UserOrdersController::renderOrders
   methods: ['GET']
+
+app_user_order_edit:
+  path: /order/edit/{id}
+  controller: App\Controller\UserOrdersController::processEditOrderRequest
+  methods: ['GET']
+
+app_order_register_render:
+  path: /order
+  controller: App\Controller\UserOrdersController::registerOrderRender
+  methods: ['GET']
+
+app_process_order_register_request:
+  path: /order
+  controller: App\Controller\UserOrdersController::processRegisterOrderRequest
+  methods: ['POST']
+

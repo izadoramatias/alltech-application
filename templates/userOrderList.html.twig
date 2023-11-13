@@ -58,10 +58,12 @@
             <div style="height: 10%;" class="body-header">
                 <div class="d-flex align-items-center justify-content-between">
                     <h3 class="fw-bold">Home</h3>
-                    <button class="btn btn-info text-light fw-bold d-flex align-items-center justify-content-between gap-2">
-                        <svg class="plus" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><style>svg.plus{fill:#fafafa}</style><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-                        Cadastrar pedido
-                    </button>
+                    <a class="text-decoration-none" href="/order">
+                        <button class="btn btn-info text-light fw-bold d-flex align-items-center justify-content-between gap-2">
+                            <svg class="plus" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><style>svg.plus{fill:#fafafa}</style><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+                            Cadastrar pedido
+                        </button>
+                    </a>
                 </div>
                 <hr class="text-black-50">
             </div>
@@ -89,6 +91,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
         <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
+
 
         <script>
             (function ($) {
@@ -119,17 +122,32 @@
                         autoWidth: true,
                         processing: true,
                         createdRow: function (row, data, dataIndex) {
-                            console.log(data)
                             let id = data.id;
-                            let actionsHtml = '<button class="btn btn-success" type="submit" data-id="' + id + '" class="btn-edit">Editar</button>';
+                            let actionsHtml = '<div class="actions d-flex gap-2"><button class="btn btn-success btn-edit" type="submit" data-id="' + id + '">Editar</button><button type="submit" class="btn btn-danger btn-delete" data-id="' + id + '">Excluir</button></div>';
                             let columnActions = $(row).find('td:eq(3)');
 
                             columnActions.html(actionsHtml);
-
                         }
                     });
                     dataTable.draw();
+
+                    $('#orders-table').on('draw.dt', function () {
+                        $('.btn-edit').on('click', function(e) {
+                            let dataId = $(this).data('id');
+
+                            $.ajax({
+                                url: `/order/edit/${dataId}`,
+                                dataType: 'html',
+                                method: 'GET',
+                                success: function (data) {
+                                    window.location.href = `/order/edit/${dataId}`
+                                }
+                            })
+                        });
+                    });
                 });
+
+
             })(jQuery);
         </script>
     {% endblock %}

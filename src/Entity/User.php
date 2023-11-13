@@ -19,6 +19,16 @@ class User implements PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     /**
+     * @param int|null $id
+     * @return User
+     */
+    public function setId(?int $id): User
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
      * @var string The hashed password
      */
     #[ORM\Column]
@@ -37,7 +47,7 @@ class User implements PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(nullable: false)]
     private ?Permission $Permission = null;
 
-    #[ORM\OneToMany(mappedBy: 'User_id', targetEntity: Order::class)]
+    #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Order::class)]
     private Collection $orders;
 
     #[ORM\Column(length: 255, nullable: true)]

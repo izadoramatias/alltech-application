@@ -32,6 +32,13 @@ class OrderRepository extends ServiceEntityRepository
         return $orders;
     }
 
+    public function findOrderById(int $id)
+    {
+        $orders = $this->getEntityManager()->createQuery("SELECT o.id, o.status FROM App\Entity\Order o WHERE o.id = $id")->getResult();
+
+        return $orders;
+    }
+
 //    /**
 //     * @return Order[] Returns an array of Order objects
 //     */
