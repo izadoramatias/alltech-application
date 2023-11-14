@@ -123,31 +123,14 @@
                         processing: true,
                         createdRow: function (row, data, dataIndex) {
                             let id = data.id;
-                            let actionsHtml = '<div class="actions d-flex gap-2"><button class="btn btn-success btn-edit" type="submit" data-id="' + id + '">Editar</button><button type="submit" class="btn btn-danger btn-delete" data-id="' + id + '">Excluir</button></div>';
+                            let actionsHtml = `<div class="actions d-flex gap-2"><a href=/order/edit/${id}><button class="btn btn-success btn-edit" formmethod="get" type="submit" data-id="' + id + '">Editar</button></a><button type="submit" class="btn btn-danger btn-delete" data-id="' + id + '">Excluir</button></div>`;
                             let columnActions = $(row).find('td:eq(3)');
 
                             columnActions.html(actionsHtml);
                         }
                     });
                     dataTable.draw();
-
-                    $('#orders-table').on('draw.dt', function () {
-                        $('.btn-edit').on('click', function(e) {
-                            let dataId = $(this).data('id');
-
-                            $.ajax({
-                                url: `/order/edit/${dataId}`,
-                                dataType: 'html',
-                                method: 'GET',
-                                success: function (data) {
-                                    window.location.href = `/order/edit/${dataId}`
-                                }
-                            })
-                        });
-                    });
                 });
-
-
             })(jQuery);
         </script>
     {% endblock %}

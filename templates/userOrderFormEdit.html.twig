@@ -4,10 +4,10 @@
     <div class="bg-light min-vh-100">
         <div class="container-lg bg-light">
             <div class="row p-5">
-                <div class="col-9">
+                <div class="col-7">
                     <h3 class="fw-bolder text-end">Editando pedido</h3>
                 </div>
-                <div class="col text-end">
+                <div class="col-5 text-end">
                     <a class="text-light text-decoration-none" href="/home" methods="get">
                         <button class="btn btn-dark fw-semibold">
                             <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><style>svg{fill:#f0f0f0}</style><path d="M512 256A256 256 0 1 0 0 256a256 256 0 1 0 512 0zM231 127c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-71 71L376 232c13.3 0 24 10.7 24 24s-10.7 24-24 24l-182.1 0 71 71c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0L119 273c-9.4-9.4-9.4-24.6 0-33.9L231 127z"/></svg>
@@ -17,7 +17,8 @@
                 </div>
             </div>
             <div>
-                <form class="row g-5 was-validated" action="{{ path('app_process_order_register_request') }}" method="post" novalidate>
+                <form class="row g-5 was-validated" action="" novalidate>
+{#                    <input type="hidden" name="_method" value="PUT">#}
                     <div class="col-md-6">
                         <label for="cep" class="form-label fw-semibold ">CEP</label>
                         <div class="input-group">
@@ -74,7 +75,7 @@
                         </div>
                     </div>
                     <div class="d-flex align-items-center justify-content-center pt-5">
-                        <button type="submit" class="btn btn-lg btn-danger px-5 text-center">Entrar</button>
+                        <button type="submit" class="btn btn-lg btn-danger px-5 text-center">Salvar</button>
                     </div>
                 </form>
             </div>

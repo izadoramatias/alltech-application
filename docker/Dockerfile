@@ -31,6 +31,10 @@ RUN if [ "$XDEBUG_ENABLED" = "true" ]; then \
 # Crie um diretório de trabalho para seus projetos PHP
 WORKDIR /var/www/html
 
+RUN composer install
+RUN php bin/console doctrine:migrations:migrate
+RUN php bin/console doctrine:fixtures:load
+
 # Exponha a porta 80 para acesso via navegador
 EXPOSE 80
 

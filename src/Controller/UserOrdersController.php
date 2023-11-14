@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\DTO\OrderDTO;
+use App\Entity\Order;
 use App\Helper\DataTablesJsonFormatter;
 use App\Helper\OrderFormatter;
 use App\Repository\OrderRepository;
@@ -72,11 +73,23 @@ class UserOrdersController extends AbstractController
     }
 
     #[Route('/order/edit/{id}', name: 'app_user_order_edit', methods: ['GET'])]
-    public function processEditOrderRequest(int $id): Response
+    public function processFormEditOrderRequest(int $id): Response
     {
-        $order = $this->orderRepository->findOrderById($id);
-        return $this->render('userOrderFormEdit.html.twig', parameters: $order[0], response: new Response(200));
+        $order = $this->orderRepository->findBy(['id' => $id]);
+        if ( empty($order) ) {
+            return $this->redirectToRoute('app_user_order_listing_render')
+                ->setStatusCode(Response::HTTP_BAD_REQUEST, 'O id de pedido informado é inválido.');
+        }
+
+        return $this->render('userOrderFormEdit.html.twig', parameters: $this->registerData($order[0]), response: new Response(Response::HTTP_OK));
     }
+
+//    #[Route('/order/edit/{id}', name: 'app_user_order_edit_save', methods: ['PUT'])]
+//    public function processEditOrderRequest(int $id): Response
+//    {
+//        $order = $this->orderRepository->findBy(['id' => $id]);
+//        return new Response(200);
+//    }
 
     private function getAllUserOrders(): array
     {
@@ -92,6 +105,17 @@ class UserOrdersController extends AbstractController
             'number'           => $orderDTO->getNumber(),
             'orderDescription' => $orderDTO->getOrderDescription(),
             'street'           => $orderDTO->getStreet()
+        ];
+    }
+
+    private function registerData(Order $order): array
+    {
+        return [
+            'orderDescription'  => $order->getDescription(),
+            'cep'          => $order->getAddressId()->getZipCode(),
+            'neighborhood' => $order->getAddressId()->getDistrict(),
+            'street'       => $order->getAddressId()->getStreet(),
+            'number'       => $order->getAddressId()->getNumber()
         ];
     }
 }
