@@ -123,7 +123,7 @@
                         processing: true,
                         createdRow: function (row, data, dataIndex) {
                             let id = data.id;
-                            let actionsHtml = `<div class="actions d-flex gap-2"><a href=/order/edit/${id}><button class="btn btn-success btn-edit" formmethod="get" type="submit" data-id="' + id + '">Editar</button></a><button type="submit" class="btn btn-danger btn-delete" data-id="' + id + '">Excluir</button></div>`;
+                            let actionsHtml = `<div class="actions d-flex gap-2"><a methods="get" href=/order/edit/${id}><button class="btn btn-success btn-edit" type="submit" data-id="' + id + '">Editar</button></a> <a methods="post" href="/order/delete/${id}"><button type="submit" class="btn btn-danger btn-delete" data-id="' + id + '">Excluir</button></a></div>`;
                             let columnActions = $(row).find('td:eq(3)');
 
                             columnActions.html(actionsHtml);

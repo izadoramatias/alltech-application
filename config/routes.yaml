@@ -58,6 +58,10 @@ app_order_register_render:
   controller: App\Controller\UserOrdersController::registerOrderRender
   methods: ['GET']
 
+app_request_delete_order:
+  path: /order/delete/{id}
+  controller: App\Controller\UserOrdersController::processDeleteOrderRequest
+
 app_process_order_register_request:
   path: /order
   controller: App\Controller\UserOrdersController::processRegisterOrderRequest

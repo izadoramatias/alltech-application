@@ -103,6 +103,27 @@ class UserOrdersController extends AbstractController
         return $this->redirectToRoute('app_user_order_listing_render');
     }
 
+    #[Route('/order/delete/{id}', 'app_request_delete_order')]
+    public function processDeleteOrderRequest($id)
+    {
+        $order = $this->entityManager->getRepository(Order::class)->findBy(['id' => $id]);
+        if ( !empty($order) ) {
+            $this->entityManager->remove($order[0]);
+            $this->entityManager->flush();
+            toastr()
+                ->closeOnHover(true)
+                ->closeDuration(10)
+                ->addDeleted('Pedido removido com sucesso');
+            return $this->redirectToRoute('app_user_order_listing_render')->setStatusCode(code: Response::HTTP_OK);
+        }
+
+        toastr()
+            ->closeOnHover(true)
+            ->closeDuration(10)
+            ->addError('O pedido informado é inválido', 'Erro');
+        return $this->redirectToRoute('app_user_order_listing_render')->setStatusCode(code: Response::HTTP_NOT_FOUND);
+    }
+
     private function getAllUserOrders(): array
     {
         $orders = $this->orderRepository->findAllOrders();
