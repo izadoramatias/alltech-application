@@ -17,8 +17,8 @@
                 </div>
             </div>
             <div>
-                <form class="row g-5 was-validated" action="" novalidate>
-{#                    <input type="hidden" name="_method" value="PUT">#}
+                <form class="row g-5 was-validated" method="post" action="{{ path('app_user_order_edit_save', {'id': id}) }}" novalidate>
+                    <input type="hidden" name="_method" value="PUT">
                     <div class="col-md-6">
                         <label for="cep" class="form-label fw-semibold ">CEP</label>
                         <div class="input-group">

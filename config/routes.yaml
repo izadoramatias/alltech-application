@@ -50,9 +50,8 @@ app_user_order_edit:
   methods: ['GET']
 
 app_user_order_edit_save:
-  path: /order/edit/{id}
-  controller: App\Controller\UserOrdersController::processEditOrderRequest
-  methods: ['PUT']
+  path: /order/edit/{id}/save
+  controller: App\Controller\UserOrdersController::processSaveEditedOrderRequest
 
 app_order_register_render:
   path: /order

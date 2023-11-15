@@ -73,7 +73,7 @@ class UserOrdersController extends AbstractController
     }
 
     #[Route('/order/edit/{id}', name: 'app_user_order_edit', methods: ['GET'])]
-    public function processFormEditOrderRequest(int $id): Response
+    public function processFormEditOrderRequest($id): Response
     {
         $order = $this->orderRepository->findBy(['id' => $id]);
         if ( empty($order) ) {
@@ -84,12 +84,24 @@ class UserOrdersController extends AbstractController
         return $this->render('userOrderFormEdit.html.twig', parameters: $this->registerData($order[0]), response: new Response(Response::HTTP_OK));
     }
 
-//    #[Route('/order/edit/{id}', name: 'app_user_order_edit_save', methods: ['PUT'])]
-//    public function processEditOrderRequest(int $id): Response
-//    {
-//        $order = $this->orderRepository->findBy(['id' => $id]);
-//        return new Response(200);
-//    }
+    #[Route('/order/edit/{id}/save', name: 'app_user_order_edit_save')]
+    public function processSaveEditedOrderRequest($id, OrderService $orderService, Request $request): Response
+    {
+        $order = $this->entityManager->getRepository(Order::class)->findBy(['id' => $id]);
+        $orderDTO = OrderDTO::fromRequest($request);
+
+        try {
+            $orderService->registerEditedOrder($order[0], $orderDTO);
+        } catch ( BadRequestException $exception ) {
+            return $this->render('userOrderFormEdit.html.twig', parameters: $this->formattedOrderData($orderDTO, $id), response: new Response(Response::HTTP_BAD_REQUEST));
+        }
+
+        toastr()
+            ->closeOnHover(true)
+            ->closeDuration(10)
+            ->addSuccess('Pedido editado com sucesso', 'Sucesso');
+        return $this->redirectToRoute('app_user_order_listing_render');
+    }
 
     private function getAllUserOrders(): array
     {
@@ -97,9 +109,10 @@ class UserOrdersController extends AbstractController
         return $orders->getResult();
     }
 
-    private function formattedOrderData(OrderDTO $orderDTO): array
+    private function formattedOrderData(OrderDTO $orderDTO, int $id = 0): array
     {
         return [
+            'id'               => $id,
             'cep'              => $orderDTO->getCep(),
             'neighborhood'     => $orderDTO->getNeighborhood(),
             'number'           => $orderDTO->getNumber(),
@@ -111,11 +124,12 @@ class UserOrdersController extends AbstractController
     private function registerData(Order $order): array
     {
         return [
+            'id'                => $order->getId(),
             'orderDescription'  => $order->getDescription(),
-            'cep'          => $order->getAddressId()->getZipCode(),
-            'neighborhood' => $order->getAddressId()->getDistrict(),
-            'street'       => $order->getAddressId()->getStreet(),
-            'number'       => $order->getAddressId()->getNumber()
+            'cep'               => $order->getAddressId()->getZipCode(),
+            'neighborhood'      => $order->getAddressId()->getDistrict(),
+            'street'            => $order->getAddressId()->getStreet(),
+            'number'            => $order->getAddressId()->getNumber()
         ];
     }
 }

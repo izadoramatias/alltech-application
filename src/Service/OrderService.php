@@ -10,8 +10,10 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Respect\Validation\Validator as v;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class OrderService
 {
@@ -27,6 +29,17 @@ class OrderService
             $this->entityManager->merge($order);
             $this->entityManager->flush();
         } catch (BadRequestException $exception) {
+            throw new BadRequestException();
+        }
+        return new Response(status: Response::HTTP_OK);
+    }
+
+    public function registerEditedOrder(Order $order, OrderDTO $orderDTO)
+    {
+        try {
+            $editedOrder = $this->validatePutOrder($order, $orderDTO);
+            $this->entityManager->flush();
+        } catch (BadRequestHttpException) {
             throw new BadRequestException();
         }
         return new Response(status: Response::HTTP_OK);
@@ -68,5 +81,31 @@ class OrderService
         $order->setUserId($user);
 
         return $order;
+    }
+
+    public function validatePutOrder(Order $order, OrderDTO $orderDTO): Order
+    {
+        $isCepEmpty          = !v::stringType()->notEmpty()->validate($orderDTO->getCep());
+        $isNumberEmpty       = !v::stringType()->notEmpty()->validate($orderDTO->getNumber());
+        $isNeighborhoodEmpty = !v::stringType()->notEmpty()->validate($orderDTO->getNeighborhood());
+        $isEquipmentEmpty    = !v::stringType()->notEmpty()->validate($orderDTO->getOrderDescription());
+        $isStreetEmpty       = !v::stringType()->notEmpty()->validate($orderDTO->getStreet());
+
+        if ( $isCepEmpty or $isNumberEmpty or $isNeighborhoodEmpty or $isEquipmentEmpty or $isStreetEmpty ) {
+            throw new BadRequestException();
+        }
+
+        $editedAddress = $order->getAddressId();
+        $editedAddress->setZipCode($orderDTO->getCep());
+        $editedAddress->setCity('Garça');
+        $editedAddress->setDistrict($orderDTO->getNeighborhood());
+        $editedAddress->setStreet($orderDTO->getStreet());
+        $editedAddress->setNumber($orderDTO->getNumber());
+
+        $editedOrder = $order
+            ->setDescription($orderDTO->getOrderDescription())
+            ->setAddressId($editedAddress);
+
+        return $editedOrder;
     }
 }
