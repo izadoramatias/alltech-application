@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{% block title %}Adm - Dashboard{% endblock %}
+{% block title %}Adm - Equipamentos{% endblock %}
 {% block stylesheets %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -61,83 +61,29 @@
             </div>
         </nav>
         <div style="height: 90%;" class="container-fluid py-4 px-5">
-            <div style="height: 10%;" class="body-header">
-                <div class="d-flex align-items-center justify-content-between">
-                    <h3 class="fw-bold">Doações</h3>
-                </div>
-                <hr class="text-black-50">
+            <div class="d-flex align-items-center justify-content-between">
+                <h3 class="fw-bold">Equipamentos</h3>
+                <a class="text-decoration-none" href="/equipment">
+                    <button class="btn btn-info text-light fw-bold d-flex align-items-center justify-content-between gap-2">
+                        <svg class="plus" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><style>svg.plus{fill:#fafafa}</style><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+                        Novo equipamento
+                    </button>
+                </a>
             </div>
             <div style="height: 90%;" class="body-body pt-5">
                 <div style="box-shadow: 0 2px 4px 1px rgba(0,0,0,0.24);" class="h-100 container-fluid rounded border-top border-3 border-danger">
                     <div class="h-100 px-2 pb-2 pt-4">
-                        <ul class="nav nav-tabs" id="myTab" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#pending-donations-tab" type="button" role="tab" aria-controls="pending-donations-tab" aria-selected="true">Pendentes</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#completed-donations-tab" type="button" role="tab" aria-controls="completed-donations-tab" aria-selected="false">Concluídas</button>
-                            </li>
-                        </ul>
-                        <div class="tab-content pt-2" id="myTabContent">
-                            <div class="tab-pane fade show active" id="pending-donations-tab" role="tabpanel" aria-labelledby="pending-donations-tab" tabindex="0">
-                                <table id="pendant-orders-table" class="w-100 row-border">
-                                    <thead>
-                                    <tr>
-                                        <th>Destinatário</th>
-                                        <th>Telefone</th>
-                                        <th>Ações</th>
-                                    </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                            <div class="tab-pane fade show pt-2" id="completed-donations-tab" role="tabpanel" aria-labelledby="completed-donations-tab" tabindex="0">
-                                <table id="completed-orders-table" class="w-100 row-border">
-                                    <thead>
-                                    <tr>
-                                        <th>Destinatário</th>
-                                        <th>Telefone</th>
-                                        <th>Data da entrega</th>
-                                        <th>Ações</th>
-                                    </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="exampleModalLg" tabindex="-1" aria-labelledby="exampleModalLgLabel" style="display: none;" aria-hidden="true">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div class="px-4">
-                        <div class="modal-header">
-                            <p class="fw-normal" style="font-size: 13px; margin-bottom: 0">
-                                Mais informações do pedido de: <span class="fw-bold">Maria da Silva</span>
-                            </p>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div style="box-shadow: 0 2px 4px 1px rgba(0,0,0,0.24);" class="h-100 container-fluid rounded border-top border-3 border-danger">
-                                <div class="h-100 px-2 pb-2 pt-4">
-                                    <div style="height: 100px" class="d-flex justify-content-between align-items-center">
-                                        <div class="alert alert-warning d-flex align-items-center" role="alert">
-                                            <div>
-                                                <span>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><style>svg{fill:#664d03}</style><path d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"/></svg>
-                                                    </span>
-                                                O pedido ainda não foi concluído
-                                            </div>
-                                        </div>
-                                        <div class="d-flex gap-2">
-                                            <button type="button" class="btn btn-secondary">Fechar</button>
-                                            <button type="button" class="btn btn-success">Concluir pedido</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <table id="equipments-table" class="w-100 row-border">
+                            <thead>
+                            <tr>
+                                <th>Descrição</th>
+                                <th>Doador</th>
+                                <th>Data de recebimento</th>
+                                <th>Disponibilidade</th>
+                                <th>Ações</th>
+                            </tr>
+                            </thead>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -153,9 +99,9 @@
         <script>
             (function ($) {
                 $(document).ready(function() {
-                    let dataTable = $('#pendant-orders-table').DataTable({
+                    let dataTable = $('#equipments-table').DataTable({
                         "ajax": {
-                            "url": "/pendant-orders",
+                            "url": "/equipments/load",
                             'dataSrc': function(data) {
                                 console.log(JSON.parse(data.data))
                                 return JSON.parse(data.data);
@@ -163,8 +109,10 @@
                         },
                         iDisplayLength: 25,
                         "columns": [
-                            { "data": "user.name" },
-                            { "data": "user.phone" },
+                            { "data": "description" },
+                            { "data": "donator" },
+                            { "data": "receiptDate" },
+                            { "data": "availability" },
                             { "data": null, 'width': '10%'},
                         ],
                         'language': {
@@ -180,8 +128,8 @@
                         processing: true,
                         createdRow: function (row, data, dataIndex) {
                             let id = data.id;
-                            let actionsHtml = `<div class="actions d-flex gap-2"><button class="btn btn-success btn-edit" type="submit" data-id="' + id + '"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><style>.btn-edit > svg{fill:#fafafa}</style><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg></button><button type="submit" data-bs-toggle="modal"    data-bs-target="#exampleModalLg" class="btn btn-info btn-delete" data-id="' + id + '"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><style>.btn-delete > svg{fill:#fafafa}</style><path d="M192 0c-41.8 0-77.4 26.7-90.5 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H282.5C269.4 26.7 233.8 0 192 0zm0 64a32 32 0 1 1 0 64 32 32 0 1 1 0-64zM72 272a24 24 0 1 1 48 0 24 24 0 1 1 -48 0zm104-16H304c8.8 0 16 7.2 16 16s-7.2 16-16 16H176c-8.8 0-16-7.2-16-16s7.2-16 16-16zM72 368a24 24 0 1 1 48 0 24 24 0 1 1 -48 0zm88 0c0-8.8 7.2-16 16-16H304c8.8 0 16 7.2 16 16s-7.2 16-16 16H176c-8.8 0-16-7.2-16-16z"/></svg></button></div>`;
-                            let columnActions = $(row).find('td:eq(2)');
+                            let actionsHtml = `<div class="actions d-flex gap-2"><a methods="get" href=/order/edit/${id}><button class="btn btn-success btn-edit" type="submit" data-id="' + id + '">Editar</button></a> <a methods="post" href="/order/delete/${id}"><button type="submit" class="btn btn-danger btn-delete" data-id="' + id + '">Excluir</button></a></div>`;
+                            let columnActions = $(row).find('td:eq(4)');
 
                             columnActions.html(actionsHtml);
                         }

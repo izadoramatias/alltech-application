@@ -5,7 +5,7 @@ namespace App\Entity;
 use App\Repository\EquipmentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-
+#[ORM\Table(name: 'Equipments')]
 #[ORM\Entity(repositoryClass: EquipmentRepository::class)]
 class Equipment
 {
@@ -23,7 +23,7 @@ class Equipment
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $availability = null;
 
-    #[ORM\ManyToOne(inversedBy: 'equipment')]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'equipment')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Donator $donator = null;
 
