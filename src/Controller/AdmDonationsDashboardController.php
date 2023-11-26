@@ -39,22 +39,74 @@ class AdmDonationsDashboardController extends AbstractController
     }
 
     #[Route('/pendant-orders', name: 'app_admdashboard_pendant_orders', methods: ['GET'])]
-    public function renderOrders(Request $request): Response
+    public function renderPendantOrders(Request $request): Response
     {
         return new JsonResponse(DataTablesJsonFormatter::format
         (
-            $this->formatPendingOrders($this->getAllUserOrders()),
+            $this->formatPendingOrders($this->getAllPendantOrders()),
             $request->query->get('draw')
         ));
     }
 
-    private function getAllUserOrders(): array
+    #[Route('/concluded-orders', name: 'app_admdashboard_concluded_orders', methods: ['GET'])]
+    public function renderConcludedOrders(Request $request): Response
     {
-        $orders = $this->entityManager->getRepository(Order::class)->findAll();
+        return new JsonResponse(DataTablesJsonFormatter::format
+        (
+            $this->formatPendingOrders($this->getAllConcludedOrders()),
+            $request->query->get('draw')
+        ));
+    }
+
+    private function getAllPendantOrders(): array
+    {
+        $orders = $this->entityManager->getRepository(Order::class)->findBy(['status' => 1]);
+        return $orders;
+    }
+
+    private function getAllConcludedOrders(): array
+    {
+        $orders = $this->entityManager->getRepository(Order::class)->findBy(['status' => 2]);
         return $orders;
     }
 
     private function formatPendingOrders(array $orders): array
+    {
+        $formatedOrders = [];
+
+        foreach ($orders as $order) {
+            $zip_code = $order->getAddressId()->getZipCode();
+            $city = $order->getAddressId()->getCity();
+            $district = $order->getAddressId()->getDistrict();
+            $street = $order->getAddressId()->getStreet();
+            $number = $order->getAddressId()->getNumber();
+
+            $formatedOrders[] = [
+                'id' => $order->getId(),
+                'description' => $order->getDescription(),
+                'status' => $order->getStatus() === 1 ? 'Em Andamento' : 'Concluído',
+                'address' =>
+                    [
+                        'cep' => $zip_code,
+                        'city' => $city,
+                        'neighborhood' => $district,
+                        'street' => $street,
+                        'number' => $number
+                    ],
+                'user' =>
+                    [
+                        'name' => $order->getUserId()->getFullName(),
+                        'phone' => $order->getUserId()->getPhone(),
+                        'email' => $order->getUserId()->getEmail()
+                    ]
+
+            ];
+        }
+
+        return $formatedOrders;
+    }
+
+    private function formatConcludedOrders(array $orders): array
     {
         $formatedOrders = [];
 

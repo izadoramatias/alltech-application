@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div>
-                <form class="row g-5 needs-validation d-flex flex-column justify-content-center align-items-center mt-3" action="{{ path('app_register_equipment_request') }}" method="post" novalidate>
+                <form class="row g-5 needs-validation d-flex flex-column justify-content-center align-items-center" action="{{ path('app_register_equipment_request') }}" method="post" novalidate>
                     <div class="col-md-8">
                         <label for="donator" class="form-label fw-semibold ">Doador</label>
                         <div class="input-group input-group-lg">
@@ -52,7 +52,7 @@
                         </div>
                     </div>
                     <input type="hidden" id="submitButton" name="submitButton" value="">
-                    <div class="d-flex align-items-center justify-content-center gap-2 pt-5">
+                    <div class="d-flex align-items-center justify-content-center gap-2 pt-2">
                         <button type="submit" onclick="setSubmitType('backToRegister')" class="btn btn-lg btn-secondary px-5 text-center">Registrar e cadastrar um novo</button>
                         <button type="submit" onclick="setSubmitType('backToListing')" class="btn btn-lg btn-danger px-5 text-center">Registrar</button>
                     </div>

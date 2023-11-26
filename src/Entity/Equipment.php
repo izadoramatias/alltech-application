@@ -27,6 +27,9 @@ class Equipment
     #[ORM\JoinColumn(nullable: false)]
     private ?Donator $donator = null;
 
+    #[ORM\ManyToOne(inversedBy: 'Equipment')]
+    private ?CompletedOrder $completedOrder = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -76,6 +79,18 @@ class Equipment
     public function setDonator(?Donator $donator): static
     {
         $this->donator = $donator;
+
+        return $this;
+    }
+
+    public function getCompletedOrder(): ?CompletedOrder
+    {
+        return $this->completedOrder;
+    }
+
+    public function setCompletedOrder(?CompletedOrder $completedOrder): static
+    {
+        $this->completedOrder = $completedOrder;
 
         return $this;
     }
